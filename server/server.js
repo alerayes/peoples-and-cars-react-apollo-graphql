@@ -2,6 +2,7 @@ import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core'
 import { ApolloServer } from 'apollo-server-express'
 import express from 'express'
 import http from 'http'
+import { resolvers, typeDefs } from './src/schema'
 
 
 const startApolloServer = async(typeDefs, resolvers) => {
@@ -23,3 +24,5 @@ const startApolloServer = async(typeDefs, resolvers) => {
 
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
 }
+
+startApolloServer(typeDefs, resolvers)
