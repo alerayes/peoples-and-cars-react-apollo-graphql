@@ -116,6 +116,8 @@ const typeDefs = gql`
 
         cars: [Cars]
         car(id: String!): Cars
+
+
     }
 
     type Mutation {
@@ -161,7 +163,9 @@ const resolvers = {
         car: (root, args) => {
             const car = find(cars, {id: args.id})
             return car
-        }
+        },
+
+
     },
 
     Mutation: {
