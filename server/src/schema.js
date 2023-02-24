@@ -1,5 +1,5 @@
 import { gql } from "apollo-server-express";
-import { find, remove } from "lodash";
+import { filter, find, remove } from "lodash";
 
 const people = [
     {
@@ -117,6 +117,7 @@ const typeDefs = gql`
         cars: [Cars]
         car(id: String!): Cars
 
+        peopleWithCars(personId: String!): [Cars]
 
     }
 
@@ -138,12 +139,14 @@ const typeDefs = gql`
                price: String!,
                personId: String!): Cars
 
-        updateCar(id: String!,
-                  year: String,
-                  make: String,
-                  model: String,
-                  price: String,
-                  personId: String): Cars
+               updateCar(
+               id: String!
+               year: String
+               make: String
+               model: String
+               price: String
+               personId: String
+              ): Cars
 
         removeCar(id: String!): Cars          
     }
@@ -164,6 +167,11 @@ const resolvers = {
             const car = find(cars, {id: args.id})
             return car
         },
+
+        peopleWithCars: (root, args) => {
+          const personCars = filter(cars, ['personId' , args.id])
+          return personCars
+        }
 
 
     },
@@ -220,17 +228,18 @@ const resolvers = {
         },
 
         updateCar: (root, args) => {
-            const car = find(cars, {id: args.id})
-
-            if(!car) throw new Error(`Couldn't find car with id ${args.id}`)
-
-            car.year = args.year
-            car.make = args.make
-            car.model = args.model
-            car.price = args.price
-            car.personId = args.personId
-
-            return car
+          const car = find(cars, { id: args.id });
+          if (!car)
+            throw new Error(
+              `Couldn't find a car with ID ${args.id}`
+            );
+          car.year = args.year;
+          car.make = args.make;
+          car.model = args.model;
+          car.price = args.price;
+          car.personId = args.personId;
+    
+          return car;
         },
 
         removeCar: (root, args) => {
